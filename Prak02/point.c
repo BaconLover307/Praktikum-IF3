@@ -6,6 +6,7 @@
 
 #include "point.h"
 #include <stdio.h>
+#include <math.h>
 
 /* *** DEFINISI PROTOTIPE PRIMITIF *** */
 /* *** Konstruktor membentuk POINT *** */
