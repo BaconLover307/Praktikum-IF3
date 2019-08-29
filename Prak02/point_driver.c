@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include "point.h"
-#include "point.c"
 
 int main() {
     // DICTIONARY
@@ -67,7 +66,7 @@ int main() {
     printf("Input delta1: ");
     scanf("%f %f", &x1, &y1);
     printf("P1 + (%f, %f) = ",&x1,&y1);
-    TulisPOINT(PlusDelta(P2,x1,y1));
+    TulisPOINT(PlusDelta(P1,x1,y1));
     printf("\n");
     printf("\n");
 

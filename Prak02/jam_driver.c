@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include "jam.h"
-#include "jam.c"
 
 int main() {
     // DICTIONARY

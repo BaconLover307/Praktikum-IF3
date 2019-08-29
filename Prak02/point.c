@@ -28,7 +28,7 @@ void BacaPOINT (POINT * P) {
 /* I.S. Sembarang */
 /* F.S. P terdefinisi */
     // KAMUS LOKAL
-    int x1, y1;
+    float x1, y1;
     // ALGORITMA
     scanf("%f %f", &x1, &y1);
     *P = MakePOINT(x1,y1);
@@ -186,9 +186,7 @@ void Putar (POINT *P, float Sudut) {
 /* F.S. P digeser sebesar Sudut derajat dengan sumbu titik (0,0) searah jarum jam*/
     // KAMUS LOKAL
     float radian = -1 * Sudut * 3.14159265359 / 180;
-    float SIN = sin(Sudut);
-    float COS = cos(Sudut);
     // ALGORITMA
-    Absis(*P) = COS*Absis(*P) - SIN*Ordinat(*P); 
-    Ordinat(*P) = SIN*Absis(*P) + COS*Ordinat(*P); 
+    Ordinat(*P) = (cos(radian) - sin(radian))*Ordinat(*P); 
+    Absis(*P) = cos(radian)*Absis(*P) + sin(radian)*Ordinat(*P); 
 }
