@@ -10,6 +10,7 @@
 /* *** DEFINISI PROTOTIPE PRIMITIF *** */
 /* *** Konstruktor membentuk POINT *** */
 POINT MakePOINT (float X, float Y) {
+/* Membentuk sebuah POINT dari komponen-komponennya */
     // KAMUS LOKAL
     POINT P;
     // ALGORITMA
@@ -17,26 +18,22 @@ POINT MakePOINT (float X, float Y) {
     P.Y = Y;
     return(P);
 }
-/* Membentuk sebuah POINT dari komponen-komponennya */
 
 /* *** KELOMPOK Interaksi dengan I/O device, BACA/TULIS  *** */
 void BacaPOINT (POINT * P) {
-     // KAMUS LOKAL
+/* Membaca nilai absis dan ordinat dari keyboard dan membentuk
+   POINT P berdasarkan dari nilai absis dan ordinat tersebut */
+/* Komponen X dan Y dibaca dalam 1 baris, dipisahkan 1 buah spasi */
+/* I.S. Sembarang */
+/* F.S. P terdefinisi */
+    // KAMUS LOKAL
     int x1, y1;
     // ALGORITMA
     scanf("%f %f", &x1, &y1);
     *P = MakePOINT(x1,y1);
 }
 
-/* Membaca nilai absis dan ordinat dari keyboard dan membentuk
-   POINT P berdasarkan dari nilai absis dan ordinat tersebut */
-/* Komponen X dan Y dibaca dalam 1 baris, dipisahkan 1 buah spasi */
-/* Contoh: 1 2
-   akan membentuk POINT <1,2> */
-/* I.S. Sembarang */
-/* F.S. P terdefinisi */
-
-void TulisPOINT (POINT P);
+void TulisPOINT (POINT P) {
 /* Nilai P ditulis ke layar dengan format "(X,Y)"
    tanpa spasi, enter, atau karakter lain di depan, belakang,
    atau di antaranya
@@ -44,61 +41,153 @@ void TulisPOINT (POINT P);
 */
 /* I.S. P terdefinisi */
 /* F.S. P tertulis di layar dengan format "(X,Y)" */
+    // ALGORITMA
+    printf("(%.2f, %.2f)",P.X,P.Y);
+}
 
 /* *** Kelompok operasi relasional terhadap POINT *** */
-boolean EQ (POINT P1, POINT P2);
+boolean EQ (POINT P1, POINT P2) {
 /* Mengirimkan true jika P1 = P2 : absis dan ordinatnya sama */
-boolean NEQ (POINT P1, POINT P2);
+    // ALGORITMA
+    if(P1.X == P2.X && P1.Y == P2.Y)
+    {return(true);} else {return(false);}
+}
+
+boolean NEQ (POINT P1, POINT P2) {
 /* Mengirimkan true jika P1 tidak sama dengan P2 */
+    // ALGORITMA
+    if(P1.X != P2.X || P1.Y != P2.Y)
+    {return(true);} else {return(false);}
+}
 
 /* *** Kelompok menentukan di mana P berada *** */
-boolean IsOrigin (POINT P);
+boolean IsOrigin (POINT P) {
 /* Menghasilkan true jika P adalah titik origin */
-boolean IsOnSbX (POINT P);
+    // ALGORITMA
+    if(P.X == 0 && P.Y == 0)
+    {return(true);} else {return(false);}
+}
+
+boolean IsOnSbX (POINT P) {
 /* Menghasilkan true jika P terletak Pada sumbu X */
-boolean IsOnSbY (POINT P);
+    // ALGORITMA
+    if(P.Y == 0)
+    {return(true);} else {return(false);}
+}
+
+boolean IsOnSbY (POINT P) {
 /* Menghasilkan true jika P terletak pada sumbu Y */
-int Kuadran (POINT P);
+    // ALGORITMA
+    if(P.X == 0)
+    {return(true);} else {return(false);}
+}
+
+int Kuadran (POINT P) {
 /* Menghasilkan kuadran dari P: 1, 2, 3, atau 4 */
 /* Prekondisi : P bukan titik origin, */
 /*              dan P tidak terletak di salah satu sumbu */
+    // KAMUS LOKAL
+    int kuad;
+    // ALGORITMA
+    if(P.X > 0 && P.Y > 0) {kuad = 1;}
+    else if(P.X < 0 && P.Y > 0) {kuad = 2;}
+    else if(P.X < 0 && P.Y < 0) {kuad = 3;}
+    else if(P.X > 0 && P.Y < 0) {kuad = 4;}
+    return(kuad);
+}
 
 /* *** KELOMPOK OPERASI LAIN TERHADAP TYPE *** */
-POINT NextX (POINT P);
+POINT NextX (POINT P) {
 /* Mengirim salinan P dengan absis ditambah satu */
-POINT NextY (POINT P);
+    // ALGORITMA
+    P.X += 1;
+    return(P);
+}
+
+POINT NextY (POINT P) {
 /* Mengirim salinan P dengan ordinat ditambah satu */
-POINT PlusDelta (POINT P, float deltaX, float deltaY);
+    // ALGORITMA
+    P.Y += 1;
+    return(P);
+}
+
+POINT PlusDelta (POINT P, float deltaX, float deltaY) {
 /* Mengirim salinan P yang absisnya adalah Absis(P) + deltaX dan ordinatnya adalah Ordinat(P) + deltaY */
-POINT MirrorOf (POINT P, boolean SbX);
+    // ALGORITMA
+    P.X += deltaX;
+    P.Y += deltaY;
+    return(P);
+}
+
+POINT MirrorOf (POINT P, boolean SbX) {
 /* Menghasilkan salinan P yang dicerminkan terhadap salah satu sumbu */
 /* Jika SbX bernilai true, maka dicerminkan terhadap sumbu X */
 /* Jika SbX bernilai false, maka dicerminkan terhadap sumbu Y */
-float Jarak0 (POINT P);
+    // ALGORITMA
+    if (SbX == true) {
+        P.Y *= -1;
+    } else { // SbX == false
+        P.X *= -1;
+    }
+    return(P);
+}
+
+float Jarak0 (POINT P) {
 /* Menghitung jarak P ke (0,0) */
-float Panjang (POINT P1, POINT P2);
+    // ALGORITMA
+    return(sqrt(P.X*P.X + P.Y*P.Y));
+}
+
+float Panjang (POINT P1, POINT P2) {
 /* Menghitung panjang garis yang dibentuk P1 dan P2 */
 /* Perhatikanlah bahwa di sini spec fungsi kurang baik sebab menyangkut ADT Garis. */
 /* Tuliskan spec fungsi yang lebih tepat. */
-void Geser (POINT *P, float deltaX, float deltaY);
+    // ALGORITMA
+    return(sqrt((P1.X-P2.X)*(P1.X-P2.X) + (P1.Y-P2.Y)*(P1.Y-P2.Y)));
+}
+
+void Geser (POINT *P, float deltaX, float deltaY) {
 /* I.S. P terdefinisi */
 /* F.S. P digeser, absisnya sebesar deltaX dan ordinatnya sebesar deltaY */
-void GeserKeSbX (POINT *P);
+    // ALGORITMA
+    PlusDelta(*P,deltaX,deltaY);
+}
+
+void GeserKeSbX (POINT *P) {
 /* I.S. P terdefinisi */
 /* F.S. P berada pada sumbu X dengan absis sama dengan absis semula. */
 /* Proses : P digeser ke sumbu X. */
 /* Contoh : Jika koordinat semula (9,9), maka menjadi (9,0) */
-void GeserKeSbY (POINT *P);
+    // ALGORITMA
+    Ordinat(*P) = 0;
+}
+
+void GeserKeSbY (POINT *P) {
 /* I.S. P terdefinisi*/
 /* F.S. P berada pada sumbu Y dengan ordinat yang sama dengan semula. */
 /* Proses : P digeser ke sumbu Y. */
 /* Contoh : Jika koordinat semula (9,9), maka menjadi (0,9) */
-void Mirror (POINT *P, boolean SbX);
+    // ALGORITMA
+    Absis(*P) = 0;
+}
+
+void Mirror (POINT *P, boolean SbX) {
 /* I.S. P terdefinisi */
 /* F.S. P dicerminkan tergantung nilai SbX atau SbY */
 /* Jika SbX true maka dicerminkan terhadap sumbu X */
 /* Jika SbX false maka dicerminkan terhadap sumbu Y */
-void Putar (POINT *P, float Sudut);
+    // ALGORITMA
+    MirrorOf(*P,SbX);
+}
+
+void Putar (POINT *P, float Sudut) {
 /* I.S. P terdefinisi */
 /* F.S. P digeser sebesar Sudut derajat dengan sumbu titik (0,0) searah jarum jam*/
-
+    // KAMUS LOKAL
+    float radian = -1 * Sudut * 3.14159265359 / 180;
+    float SIN = sin(Sudut);
+    float COS = cos(Sudut);
+    // ALGORITMA
+    Absis(*P) = COS*Absis(*P) - SIN*Ordinat(*P); 
+    Ordinat(*P) = SIN*Absis(*P) + COS*Ordinat(*P); 
+}
