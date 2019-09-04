@@ -10,9 +10,9 @@
 int main() {
     // DICTIONARY
     POINT P1, P2, P3;
-    int sdt;
+    float sdt;
     float x1,y1,x2,y2;
-
+/*
     // INPUT / OUTPUT
     printf("Input P1: ");
     BacaPOINT(&P1);
@@ -111,12 +111,12 @@ int main() {
     Mirror(&P1,true);
     TulisPOINT(P1);
     printf("\n");
-
+*/
     printf("Input P3: ");
     BacaPOINT(&P3); printf("\n");
     printf("Input angle: ");
-    scanf("%f",sdt); printf("\n");
-    printf("P3 rotated by %f degrees: ",&sdt);
+    scanf("%f",&sdt); printf("\n");
+    printf("P3 rotated by %f degrees: ",sdt);
     Putar(&P3,sdt);
     TulisPOINT(P3); printf("\n");
  

@@ -125,7 +125,7 @@ POINT MirrorOf (POINT P, boolean SbX) {
 /* Jika SbX bernilai true, maka dicerminkan terhadap sumbu X */
 /* Jika SbX bernilai false, maka dicerminkan terhadap sumbu Y */
     // ALGORITMA
-    if (SbX == true) {
+    if (SbX) {
         P.Y *= -1;
     } else { // SbX == false
         P.X *= -1;
@@ -178,15 +178,18 @@ void Mirror (POINT *P, boolean SbX) {
 /* Jika SbX true maka dicerminkan terhadap sumbu X */
 /* Jika SbX false maka dicerminkan terhadap sumbu Y */
     // ALGORITMA
-    MirrorOf(*P,SbX);
+    *P=MirrorOf(*P,SbX);
 }
 
 void Putar (POINT *P, float Sudut) {
 /* I.S. P terdefinisi */
 /* F.S. P digeser sebesar Sudut derajat dengan sumbu titik (0,0) searah jarum jam*/
     // KAMUS LOKAL
-    float radian = -1 * Sudut * 3.14159265359 / 180;
+    float x3 = Absis((*P));
+    float y3 = Ordinat((*P));
+    const float pi = 3.1415926535897932384626433832795028841971693993751058209;
+    float radian = pi*Sudut/ 180;
     // ALGORITMA
-    Ordinat(*P) = (cos(radian) - sin(radian))*Ordinat(*P); 
-    Absis(*P) = cos(radian)*Absis(*P) + sin(radian)*Ordinat(*P); 
+    (*P).X = cos(radian)*x3 + sin(radian)*y3; 
+    (*P).Y = -sin(radian)*x3 + cos(radian)*y3; 
 }
