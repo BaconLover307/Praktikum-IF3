@@ -87,18 +87,16 @@ void BacaIsi (TabInt * T) {
 
 void BacaIsiTab (TabInt * T) {
     // KAMUS LOKAL
-    int i = 1; // counter
+    int i = 0; // counter
     int isi;
     // ALGORITMA
-    do {
         scanf("%d",&isi);
-        if (isi!=-9999) {
-            (*T).TI[i] = isi;
-            (*T).Neff += 1;
-        }
-        if (i==1 && isi == -9999) {MakeEmpty(T);}
-        i+=1;
-    } while (isi !=-9999);
+    while ((isi!=-9999) && (GetFirstIdx(*T)+i <= MaxNbEl(*T))) {
+        (*T).TI[GetFirstIdx(*T)+i] = isi;
+        i++;
+        scanf("%d",&isi);
+    }
+    (*T).Neff = i;
 }
 /* I.S. T sembarang */
 /* F.S. Tabel T terdefinisi */
@@ -112,7 +110,7 @@ void TulisIsi (TabInt T) {
     int i; //counter
     // ALGORITMA
     if (T.Neff == 0) {
-        printf("Tabel kosong");
+        printf("Tabel kosong\n");
     } else {
         for (i = IdxMin; i <= NbElmt(T); i++)
         {printf("[%d]%d\n", i,T.TI[i]);}
@@ -232,24 +230,21 @@ boolean IsEQ (TabInt T1, TabInt T2) {
 
 boolean IsLess (TabInt T1, TabInt T2) {
     // KAMUS LOKAL
-    IdxType MaxIdx, i;
+    IdxType MaxIdx, i, j;
     boolean less = true;
+    i = 0;
     // ALGORITMA
-    if (IsEQ(T1,T2)) {less=false;}
-    else {
-        if (T1.Neff==0) {less=true;}
-        else if (T2.Neff==0) {less=false;}
-        else {
-            if (T1.Neff<=T2.Neff) {MaxIdx=T1.Neff;}
-            else {MaxIdx=T2.Neff;}
-            for (i=GetFirstIdx(T1);i<=MaxIdx;i++) {
-                if (Elmt(T1,i) < Elmt(T2,i)) {break;}
-                else {
-                    less=false;
-                    break;
-                }
-            }
-            if (i==IdxMax) {if (IdxMax==T2.Neff) {less=false;}}
+    if (Neff(T1)<=Neff(T2)) {
+        j = Neff(T1); 
+    } else { j = Neff(T2); }
+    while ((i<j) && (Elmt(T1,i) <=  Elmt(T2,i))) {
+        i++;
+        if (Elmt(T1,i) > Elmt(T2,i)) {
+            less = false;
+        }
+        if ((i == j) && (less == true) && Elmt(T1, i) == Elmt(T2, i))
+        {
+            less = (Neff(T1)<Neff(T2));
         }
     }
     return less;
@@ -265,10 +260,14 @@ IdxType Search1 (TabInt T, ElType X) {
     IdxType IdxFound;
     // ALGORITMA
     if (IsEmpty(T)) {IdxFound = IdxUndef;} else {
-        while ((Elmt(T,i) != X) || ((i+1) < GetLastIdx(T))) {
-            i++;
+      for (i=GetFirstIdx(T);i<=GetLastIdx(T);i++) {
+            if (Elmt(T,i)==X) {
+                IdxFound=i;
+                break;
+            } else if (i==GetLastIdx(T)) {
+                IdxFound=IdxUndef;
+            }
         }
-        if (Elmt(T,i) == X) {IdxFound=i;} else {IdxFound=IdxUndef;}
     }
     return IdxFound;
 }
@@ -577,7 +576,7 @@ void DelLastEl (TabInt * T, ElType * X) {
 
 void DelEli (TabInt * T, IdxType i, ElType * X) {
     // KAMUS LOKAL
-    IdxType idxdel;
+    IdxType idxdel, j;
     // ALGORITMA
     (*X) = Elmt(*T,i);
     if (GetFirstIdx(*T) < GetLastIdx(*T)) {
@@ -619,23 +618,8 @@ void AddElUnik (TabInt * T, ElType X) {
 
 /* ********** TABEL DGN ELEMEN TERURUT MEMBESAR ********** */
 IdxType SearchUrut (TabInt T, ElType X) {
-    // KAMUS LOKAL
-    IdxType i;
-    IdxType FirstIdx = GetFirstIdx(T);
-    IdxType LastIdx = GetLastIdx(T);
-
     // ALGORITMA
-    if (!IsEmpty) {
-        for (i=FirstIdx;i<=LastIdx;i++) {
-            if(Elmt(T,i) == X) {
-                break;
-            } else if (i==LastIdx) {
-                i = IdxUndef;
-            }
-            
-        }
-    } else {i=IdxUndef;}
-    return i;
+    return Search1(T,X);
 }
 /* Prekondisi: Tabel T boleh kosong. Jika tidak kosong, elemen terurut membesar. */
 /* Mengirimkan indeks di mana harga X dengan indeks terkecil diketemukan */
@@ -682,9 +666,10 @@ void Add1Urut (TabInt * T, ElType X) {
 void Del1Urut (TabInt * T, ElType X) {
     // KAMUS LOKAL
     IdxType idx = Search1(*T,X);
+    ElType val;
     // ALGORITMA
-    if(i!=IdxUndef){
-        DelEli(T,idx,&X);
+    if(idx!=IdxUndef){
+        DelEli(T,idx,&val);
     }
 }
 /* Menghapus X yang pertama kali (pada indeks terkecil) yang ditemukan */

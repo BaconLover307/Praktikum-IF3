@@ -40,10 +40,13 @@ int main()
        ####  END  #### */
     BacaIsi(&T1);
     TulisIsiTab(T1);
+    BacaIsi(&T2);
+    TulisIsiTab(T2);
     printf("\n");
-    DelLastEl(&T1,2);
-    TulisIsiTab(T1);
-
-
+    if (IsLess(T1,T2)) {
+        printf("Kurang dari");
+    } else {
+        printf("Lebih dari");
+    }
     return 0;
 }
