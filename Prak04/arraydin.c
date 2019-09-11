@@ -13,7 +13,7 @@
 void MakeEmpty(TabInt *T, int maxel) {
     // ALGORITMA
     if (maxel >= 0) {
-        TI(*T) = (int *)malloc(maxel + 1 * sizeof(int));
+        TI(*T) = (int *)malloc((maxel + 1) * sizeof(int));
         Neff(*T) = 0;
         MaxEl(*T) = maxel + 1;
     }
@@ -169,14 +169,15 @@ boolean IsEQ(TabInt T1, TabInt T2) {
     boolean eq = true;
     // ALGORITMA
     if ((T1.Neff == T2.Neff) && (T1.Neff == 0)) {
-        eq == true;
+        eq = true;
     } else if (T1.Neff == T2.Neff) {
-        while ((i <= j) && eq == true) {
+        while ((i <= j) && (eq == true)) {
             if (Elmt(T1, i) != Elmt(T2, i)) {
-                eq == false;
+                eq = false;
+                i++;
             } else {i++;}
         }
-    } else {eq == false;}
+    } else {eq = false;}
     return eq;
 }
 /* Mengirimkan true jika T1 sama dengan T2 yaitu jika Neff T1 = T2 dan semua elemennya sama */
@@ -256,8 +257,10 @@ void CopyTab(TabInt Tin, TabInt *Tout) {
     // KAMUS LOKAL
     IdxType i;
     ElType isi;
+
     // ALGORITMA
     if(!IsEmpty(Tin)) {
+        MakeEmpty(Tout,MaxEl(Tin));
         for (i=GetFirstIdx(Tin); i<=GetLastIdx(Tin); i++) {
             Elmt(*Tout,i) = Elmt(Tin,i);
         }
@@ -319,7 +322,45 @@ boolean IsAllGenap(TabInt T) {
 /* Menghasilkan true jika semua elemen T genap. T boleh kosong */
 
 /* ********** SORTING ********** */
-void Sort(TabInt *T, boolean asc);
+void Sort(TabInt *T, boolean asc) {
+    // KAMUS LOKAL
+    IdxType i,IMax,IMin; // Index untuk transversal
+    IdxType Pass;   // Tahapan pengurutan
+    ElType Temp;    // Memorasi untu pertukaran harga
+    IdxType FirstIdx = GetFirstIdx(*T);
+    IdxType LastIdx = GetLastIdx(*T);
+
+    // ALGORITMA
+    if (asc) {
+        if ((*T).Neff > 1) {
+            for (Pass=FirstIdx;Pass<LastIdx;Pass++) {
+                IMax = Pass;
+                for (i = Pass+1; i<=LastIdx; i++) {
+                    if (Elmt(*T,IMax) < Elmt(*T,i)) {
+                        IMax = i;
+                    }
+                }
+                Temp = Elmt(*T, Pass);
+                Elmt(*T, Pass) = Elmt(*T, IMax);
+                Elmt(*T, IMax) = Temp;
+            }
+        }
+    } else {
+        if ((*T).Neff > 1) {
+            for (Pass=FirstIdx;Pass<LastIdx;Pass++) {
+                IMin = Pass;
+                for (i = Pass+1; i<=LastIdx; i++) {
+                    if (Elmt(*T,IMin) > Elmt(*T,i)) {
+                        IMin = i;
+                    }
+                }
+                Temp = Elmt(*T, Pass);
+                Elmt(*T, Pass) = Elmt(*T, IMin);
+                Elmt(*T, IMin) = Temp;
+            }
+        }
+    }    
+}
 /* I.S. T boleh kosong */
 /* F.S. Jika asc = true, T terurut membesar */
 /*      Jika asc = false, T terurut mengecil */
@@ -328,12 +369,21 @@ void Sort(TabInt *T, boolean asc);
 
 /* ********** MENAMBAH DAN MENGHAPUS ELEMEN DI AKHIR ********** */
 /* *** Menambahkan elemen terakhir *** */
-void AddAsLastEl(TabInt *T, ElType X);
+void AddAsLastEl(TabInt *T, ElType X) {
+    // ALGORITMA
+    Elmt(*T,(*T).Neff+1) = X;
+    (*T).Neff++;
+}
 /* Proses: Menambahkan X sebagai elemen terakhir tabel */
 /* I.S. Tabel T boleh kosong, tetapi tidak penuh */
 /* F.S. X adalah elemen terakhir T yang baru */
+
 /* ********** MENGHAPUS ELEMEN ********** */
-void DelLastEl(TabInt *T, ElType *X);
+void DelLastEl(TabInt *T, ElType *X) {
+    // ALGORITMA
+    (*X) = Elmt(*T,GetLastIdx(*T));
+    (*T).Neff--;
+}
 /* Proses : Menghapus elemen terakhir tabel */
 /* I.S. Tabel tidak kosong */
 /* F.S. X adalah nilai elemen terakhir T sebelum penghapusan, */
