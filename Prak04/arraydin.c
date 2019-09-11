@@ -15,7 +15,7 @@ void MakeEmpty(TabInt *T, int maxel) {
     if (maxel >= 0) {
         TI(*T) = (int *)malloc((maxel + 1) * sizeof(int));
         Neff(*T) = 0;
-        MaxEl(*T) = maxel + 1;
+        MaxEl(*T) = maxel;
     }
 }
 /* I.S. T sembarang, maxel > 0 */
@@ -272,7 +272,7 @@ void CopyTab(TabInt Tin, TabInt *Tout) {
 /* Proses : Menyalin isi Tin ke Tout */
 
 ElType SumTab(TabInt T) {
-    // KAMUS
+    // KAMUS LOKAL
     int hasil = 0; // Stores summed value
     int i; // Counter
     // ALGORITMA
@@ -289,7 +289,7 @@ ElType SumTab(TabInt T) {
 /* Jika T kosong menghasilkan 0 */
 
 int CountX(TabInt T, ElType X) {
-    // KAMUS
+    // KAMUS LOKAL
     int i; // Iterator
     int n = 0; // Counter
     // ALGORITMA
@@ -306,12 +306,12 @@ int CountX(TabInt T, ElType X) {
 /* Jika T kosong menghasilkan 0 */
 
 boolean IsAllGenap(TabInt T) {
-    // KAMUS
+    // KAMUS LOKAL
     boolean genap = true; // Validator
     int i; // Iterator
     // ALGORITMA
     if (NbElmt(T)==0) {
-        genap == false;
+        genap = false;
     } else {
         for (i=1;i<=GetLastIdx(T);i++) {
             if ((Elmt(T,i)%2) == 1) {genap = false;}
@@ -331,7 +331,7 @@ void Sort(TabInt *T, boolean asc) {
     IdxType LastIdx = GetLastIdx(*T);
 
     // ALGORITMA
-    if (asc) {
+    if (!asc) {
         if ((*T).Neff > 1) {
             for (Pass=FirstIdx;Pass<LastIdx;Pass++) {
                 IMax = Pass;
@@ -391,17 +391,29 @@ void DelLastEl(TabInt *T, ElType *X) {
 /*      Tabel T mungkin menjadi kosong */
 
 /* ********* MENGUBAH UKURAN ARRAY ********* */
-void GrowTab(TabInt *T, int num);
+void GrowTab(TabInt *T, int num) {
+    // ALGORITMA
+    TI(*T) = (int*) realloc (TI(*T), (MaxEl(*T) + num) * sizeof(int));
+    MaxEl(*T) = MaxEl(*T) + num;  
+}
 /* Proses : Menambahkan max element sebanyak num */
 /* I.S. Tabel sudah terdefinisi */
 /* F.S. Ukuran tabel bertambah sebanyak num */
 
-void ShrinkTab(TabInt *T, int num);
+void ShrinkTab(TabInt *T, int num) {
+    // ALGORITMA
+    TI(*T) = (int*) realloc (TI(*T), (MaxEl(*T) - num) * sizeof(int));
+    MaxEl(*T) = MaxEl(*T) - num;
+}
 /* Proses : Mengurangi max element sebanyak num */
 /* I.S. Tabel sudah terdefinisi, ukuran MaxEl > num, dan Neff < MaxEl - num. */
 /* F.S. Ukuran tabel berkurang sebanyak num. */
 
-void CompactTab(TabInt *T);
+void CompactTab(TabInt *T) {
+    // ALGORITMA
+    TI(*T) = (int*) realloc (TI(*T), (Neff(*T)) * sizeof(int));
+    MaxEl(*T) = Neff(*T);
+}  
 /* Proses : Mengurangi max element sehingga Neff = MaxEl */
 /* I.S. Tabel tidak kosong */
 /* F.S. Ukuran MaxEl = Neff */

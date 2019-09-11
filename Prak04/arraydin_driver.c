@@ -24,8 +24,6 @@ int main()
     T4 = PlusMinusTab(T1,T2,false);
     TulisIsiTab(T4);
     printf("\n");
-    bool = IsEQ(T1,T2);
-    if (!bool) {printf("Beda");} else {printf("Sama");}
     n = Search1(T1,3);
     bool = SearchB(T1,3);
     if (bool) {printf("Found");}
@@ -38,14 +36,31 @@ int main()
     AddAsLastEl(&T1,99);
     n = 99;
     DelLastEl(&T1,&n);
-       ####  END  #### */
+
     MakeEmpty(&T2,10);
+    BacaIsi(&T2);
+    TulisIsiTab(T2);
+    printf("\n");
+    bool = IsAllGenap(T1);
+    if (!bool) {printf("Beda");} else {printf("Sama");}
+    printf("%d\n",MaxEl(T1));
+    ShrinkTab(&T1,3);
+    printf("%d\n",MaxEl(T1));
+    TulisIsiTab(T1);
+    printf("\n");
+    GrowTab(&T1,5);
+    printf("%d\n",MaxEl(T1));
+    TulisIsiTab(T1);
+    printf("\n");
+    CompactTab(&T1);
+    printf("%d\n",MaxEl(T1));
+    TulisIsiTab(T1);
+    printf("\n");
+       ####  END  #### */
     MakeEmpty(&T1,10);
     BacaIsi(&T1);
     TulisIsiTab(T1);
-    printf("\n");
-    BacaIsi(&T2);
-    TulisIsiTab(T2);
+    CopyTab(T1,&T2);
     printf("\n");
     Sort(&T1,true);
     TulisIsiTab(T1);
