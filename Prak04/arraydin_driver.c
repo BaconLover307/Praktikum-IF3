@@ -6,13 +6,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "arraydin.h"
+#include "arraydinpos.h"
 
 int main()
 {
     // DICTIONARY
     TabInt T1, T2, T3, T4;
-    IdxType i,n;
+    IdxType i,n1,n2;
     boolean bool;
     ElType Mx = 0;
     ElType Mn = 0;
@@ -58,14 +58,16 @@ int main()
     printf("\n");
        ####  END  #### */
     MakeEmpty(&T1,10);
+    MakeEmpty(&T2,10);
     BacaIsi(&T1);
     TulisIsiTab(T1);
-    CopyTab(T1,&T2);
     printf("\n");
-    Sort(&T1,true);
-    TulisIsiTab(T1);
-    Sort(&T2,false);
+    BacaIsi(&T2);
     TulisIsiTab(T2);
+    printf("\n");
+    n1 = NbElmt(T1);
+    n2 = NbElmt(T2);
+    printf("Neff1 = %d, Neff2 = %d\n",n1,n2);
 
     return 0;
 }
