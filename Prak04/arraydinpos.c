@@ -1,27 +1,31 @@
 /* Nama         : Gregorius Jovan Kresnadi */
 /* NIM          : 13518135 */
-/* Tanggal      : 13-09-2019 */
-/* Program      : arraydin.c */
-/* Deskripsi    : Definisi ADT Array Dinamis */
+/* Tanggal      : 12-09-2019 */
+/* Program      : arraydinpos.c */
+/* Deskripsi    : Definisi ADT Array Dinamis pos*/
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "arraydin.h"
-
+#include "arraydinpos.h"
 /* ********** KONSTRUKTOR ********** */
 /* Konstruktor : create tabel kosong  */
 void MakeEmpty(TabInt *T, int maxel) {
+	// KAMUS
+	int i;
     // ALGORITMA
     if (maxel >= 0) {
         TI(*T) = (int *)malloc((10000) * sizeof(int));
-        Neff(*T) = 0;
         MaxEl(*T) = maxel;
+        for (i=0;i<=maxel;i++) {
+			Elmt(*T,i) = ValUndef;
+		}
     }
 }
 /* I.S. T sembarang, maxel > 0 */
 /* F.S. Terbentuk tabel T kosong dengan kapasitas maxel + 1 */
 
 void Dealokasi(TabInt *T) {
+    MaxEl(*T)=0;
     free(TI(*T));
 }
 /* I.S. T terdefinisi; */
@@ -30,10 +34,20 @@ void Dealokasi(TabInt *T) {
 /* ********** SELEKTOR (TAMBAHAN) ********** */
 /* *** Banyaknya elemen *** */
 int NbElmt(TabInt T) {
-    return T.Neff;
+	// KAMUS
+	int x = 0;
+	int i;
+	// ALGORITMA
+    for (i = 1;i<=MaxEl(T);i++) {
+        if (Elmt(T,i) != ValUndef) {
+            x = i;
+        } else {
+            return i-1;
+        }
+    }
+    return x;
 }
-/* Mengirimkan banyaknya elemen efektif tabel */
-/* Mengirimkan nol jika tabel kosong */
+
 /* *** Daya tampung container *** */
 int MaxElement(TabInt T) {
     return MaxEl(T);
@@ -47,7 +61,7 @@ IdxType GetFirstIdx(TabInt T) {
 /* Mengirimkan indeks elemen T pertama */
 
 IdxType GetLastIdx(TabInt T) {
-    return Neff(T);
+    return NbElmt(T);
 }
 /* Prekondisi : Tabel T tidak kosong */
 /* Mengirimkan indeks elemen T terakhir */
@@ -95,7 +109,6 @@ void BacaIsi(TabInt *T) {
     if (n == 0) {
         Dealokasi(T);
     } else {
-        (*T).Neff = n;
         for (i = 1; i <= n; i++) {
             scanf("%d", &(*T).TI[i]);
         }
@@ -116,9 +129,9 @@ void TulisIsiTab(TabInt T) {
     int i = 1; //counter
     // ALGORITMA
     printf("[");
-    while (i <= T.Neff) {
+    while (i <= NbElmt(T)) {
         printf("%d", T.TI[i]);
-        if (i != T.Neff) {
+        if (i != NbElmt(T)) {
             printf(",");
         }
         i += 1;
@@ -142,22 +155,17 @@ TabInt PlusMinusTab(TabInt T1, TabInt T2, boolean plus) {
     MakeEmpty(&Thasil,MaxEl(T1));
     // ALGORITMA
     if (plus) {
-        for (i = 1; i <= T1.Neff; i++) {
+        for (i = 1; i <= NbElmt(T1); i++) {
             Thasil.TI[i] = T1.TI[i] + T2.TI[i];
         }
-        Thasil.Neff = T1.Neff;
         return Thasil;
     } else {
-        for (i = 1; i <= T1.Neff; i++) {
+        for (i = 1; i <= NbElmt(T1); i++) {
             Thasil.TI[i] = T1.TI[i] - T2.TI[i];
         }
-        Thasil.Neff = T1.Neff;
         return Thasil;
     }
 }
-/* Prekondisi : T1 dan T2 memiliki Neff sama dan tidak kosong */
-/* Jika plus = true, mengirimkan  T1+T2, yaitu setiap elemen T1 dan T2 pada indeks yang sama dijumlahkan */
-/* Jika plus = false, mengirimkan T1-T2, yaitu setiap elemen T1 dikurangi elemen T2 pada indeks yang sama */
 
 
 /* ********** OPERATOR RELASIONAL ********** */
@@ -168,9 +176,9 @@ boolean IsEQ(TabInt T1, TabInt T2) {
     IdxType j = GetLastIdx(T1);
     boolean eq = true;
     // ALGORITMA
-    if ((T1.Neff == T2.Neff) && (T1.Neff == 0)) {
+    if ((NbElmt(T1) == NbElmt(T2)) && (NbElmt(T1) == 0)) {
         eq = true;
-    } else if (T1.Neff == T2.Neff) {
+    } else if (NbElmt(T1) == NbElmt(T2)) {
         while ((i <= j) && (eq == true)) {
             if (Elmt(T1, i) != Elmt(T2, i)) {
                 eq = false;
@@ -180,7 +188,6 @@ boolean IsEQ(TabInt T1, TabInt T2) {
     } else {eq = false;}
     return eq;
 }
-/* Mengirimkan true jika T1 sama dengan T2 yaitu jika Neff T1 = T2 dan semua elemennya sama */
 
 
 /* ********** SEARCHING ********** */
@@ -193,10 +200,10 @@ IdxType Search1(TabInt T, ElType X) {
         return IdxUndef;
     } else {
         i = IdxMin;
-        while ((Elmt(T, i) != X) && (i <= Neff(T))) {
+        while ((Elmt(T, i) != X) && (i <= NbElmt(T))) {
             if (Elmt(T, i) != X) {i++;}
         }
-        if (i > Neff(T)) {
+        if (i > NbElmt(T)) {
             return IdxUndef;
         } else {
             return i;
@@ -265,7 +272,6 @@ void CopyTab(TabInt Tin, TabInt *Tout) {
             Elmt(*Tout,i) = Elmt(Tin,i);
         }
     }
-    Neff(*Tout) = Neff(Tin);
 }
 /* I.S. Tin terdefinisi tidak kosong, Tout sembarang */
 /* F.S. Tout berisi salinan dari Tin (identik, Neff dan MaxEl sama) */
@@ -332,7 +338,7 @@ void Sort(TabInt *T, boolean asc) {
 
     // ALGORITMA
     if (!asc) {
-        if ((*T).Neff > 1) {
+        if (NbElmt(*T)> 1) {
             for (Pass=FirstIdx;Pass<LastIdx;Pass++) {
                 IMax = Pass;
                 for (i = Pass+1; i<=LastIdx; i++) {
@@ -346,7 +352,7 @@ void Sort(TabInt *T, boolean asc) {
             }
         }
     } else {
-        if ((*T).Neff > 1) {
+        if (NbElmt(*T) > 1) {
             for (Pass=FirstIdx;Pass<LastIdx;Pass++) {
                 IMin = Pass;
                 for (i = Pass+1; i<=LastIdx; i++) {
@@ -371,8 +377,7 @@ void Sort(TabInt *T, boolean asc) {
 /* *** Menambahkan elemen terakhir *** */
 void AddAsLastEl(TabInt *T, ElType X) {
     // ALGORITMA
-    Elmt(*T,(*T).Neff+1) = X;
-    (*T).Neff++;
+    Elmt(*T,(NbElmt(*T)+1)) = X;
 }
 /* Proses: Menambahkan X sebagai elemen terakhir tabel */
 /* I.S. Tabel T boleh kosong, tetapi tidak penuh */
@@ -382,7 +387,7 @@ void AddAsLastEl(TabInt *T, ElType X) {
 void DelLastEl(TabInt *T, ElType *X) {
     // ALGORITMA
     (*X) = Elmt(*T,GetLastIdx(*T));
-    (*T).Neff--;
+    Elmt(*T,GetLastIdx(*T)) = ValUndef;
 }
 /* Proses : Menghapus elemen terakhir tabel */
 /* I.S. Tabel tidak kosong */
@@ -393,7 +398,7 @@ void DelLastEl(TabInt *T, ElType *X) {
 /* ********* MENGUBAH UKURAN ARRAY ********* */
 void GrowTab(TabInt *T, int num) {
     // ALGORITMA
-    //TI(*T) = (int*) realloc (TI(*T), (MaxEl(*T) + num) * sizeof(int));
+    TI(*T) = (int*) realloc (TI(*T), (MaxEl(*T) + num) * sizeof(int));
     MaxEl(*T) = MaxEl(*T) + num;  
 }
 /* Proses : Menambahkan max element sebanyak num */
@@ -402,9 +407,8 @@ void GrowTab(TabInt *T, int num) {
 
 void ShrinkTab(TabInt *T, int num) {
     // ALGORITMA
-    //TI(*T) = (int*) realloc (TI(*T), (MaxEl(*T) - num) * sizeof(int));
+    TI(*T) = (int*) realloc (TI(*T), (MaxEl(*T) - num) * sizeof(int));
     MaxEl(*T) = MaxEl(*T) - num;
-    if (MaxEl(*T)<Neff(*T)) {Neff(*T) = MaxEl(*T);};
 }
 /* Proses : Mengurangi max element sebanyak num */
 /* I.S. Tabel sudah terdefinisi, ukuran MaxEl > num, dan Neff < MaxEl - num. */
@@ -412,8 +416,7 @@ void ShrinkTab(TabInt *T, int num) {
 
 void CompactTab(TabInt *T) {
     // ALGORITMA
-    //TI(*T) = (int*) realloc (TI(*T), (Neff(*T)) * sizeof(int));
-    MaxEl(*T) = Neff(*T);
+    TI(*T) = (int*) realloc (TI(*T), (NbElmt(*T)) * sizeof(int));
 }  
 /* Proses : Mengurangi max element sehingga Neff = MaxEl */
 /* I.S. Tabel tidak kosong */
