@@ -1,51 +1,28 @@
 /* Nama         : Gregorius Jovan Kresnadi */
 /* NIM          : 13518135 */
-/* Tanggal      : 18-09-2019 */
+/* Tanggal      : 17-09-2019 */
 /* Program      : matriks.c */
 /* Deskripsi    : Definisi ADT Matriks */
 
 /* ********** Definisi TYPE MATRIKS dengan indeks dan elemen integer ********** */
 
-#ifndef MATRIKS_H
-#define MATRIKS_H
-
-#include "boolean.h"
 #include "matriks.h"
+#include <stdio.h>
 
-/* Ukuran minimum dan maksimum baris dan kolom */
-#define BrsMin 1
-#define BrsMax 100
-#define KolMin 1
-#define KolMax 100
-
-typedef int indeks; /* indeks baris, kolom */
-typedef int ElType;
-typedef struct {
-    ElType Mem[BrsMax+1][KolMax+1];
-    int NBrsEff; /* banyaknya/ukuran baris yg terdefinisi */
-    int NKolEff; /* banyaknya/ukuran kolom yg terdefinisi */
-} MATRIKS;
-/* NBrsEff <= 1 dan NKolEff <= 1 */
-/* Indeks matriks yang digunakan: [BrsMin..BrsMax][KolMin..KolMax] */
-/* Memori matriks yang dipakai selalu di "ujung kiri atas" */
 
 /* ********** DEFINISI PROTOTIPE PRIMITIF ********** */
 /* *** Konstruktor membentuk MATRIKS *** */
 void MakeMATRIKS (int NB, int NK, MATRIKS * M) {
-
+    NBrsEff(*M) = NB;
+    NKolEff(*M) = NK;
 }
 /* Membentuk sebuah MATRIKS "kosong" yang siap diisi berukuran NB x NK di "ujung kiri" memori */
 /* I.S. NB dan NK adalah valid untuk memori matriks yang dibuat */
 /* F.S. Matriks M sesuai dengan definisi di atas terbentuk */
 
-/* *** Selektor *** */
-#define NBrsEff(M) (M).NBrsEff
-#define NKolEff(M) (M).NKolEff
-#define Elmt(M,i,j) (M).Mem[(i)][(j)]
-
 /* *** Selektor "DUNIA MATRIKS" *** */
 boolean IsIdxValid (int i, int j) {
-    return((i>=1 && i<=0) && (j>=1 && j<=0));
+    return((i>=BrsMin) && (i<=BrsMax) && (j>=KolMin) && (j<=KolMax));
 }
 /* Mengirimkan true jika i, j adalah indeks yang valid untuk matriks apa pun */
 
@@ -86,6 +63,7 @@ void CopyMATRIKS (MATRIKS MIn, MATRIKS * MHsl) {
     int jIn = GetLastIdxKol(MIn);
     int i,j;
     // ALGORITMA
+    MakeMATRIKS(iIn,jIn,&(*MHsl));
     for (i=1;i<=iIn;i++) {
         for (j=1;j<=jIn;j++) {
             Elmt(*MHsl, i, j) = Elmt(MIn,i,j);
@@ -95,7 +73,28 @@ void CopyMATRIKS (MATRIKS MIn, MATRIKS * MHsl) {
 /* Melakukan assignment MHsl  MIn */
 
 /* ********** KELOMPOK BACA/TULIS ********** */
-void BacaMATRIKS (MATRIKS * M, int NB, int NK);
+void BacaMATRIKS (MATRIKS * M, int NB, int NK) {
+     // KAMUS LOKAL
+    int i,j;
+    // ALGORITMA
+    MakeMATRIKS(NB,NK,&(*M));
+    if (NB>1) {
+        for (i=1;i<NB;i++) {
+            if (NK>1) {
+                for (j=1;j<NK;j++) {
+                    scanf("%d ",&Elmt(*M,i,j));
+                }
+            }
+            scanf("%d",&Elmt(*M,i,NK));
+            }
+    }
+    if (NK>1) {
+        for (j=1;j<NK;j++) {
+            scanf("%d ",&Elmt(*M,NB,j));
+        }
+    }
+    scanf("%d",&Elmt(*M,NB,NK));
+}
 /* I.S. IsIdxValid(NB,NK) */
 /* F.S. M terdefinisi nilai elemen efektifnya, berukuran NB x NK */
 /* Proses: Melakukan MakeMATRIKS(M,NB,NK) dan mengisi nilai efektifnya */
@@ -105,7 +104,30 @@ void BacaMATRIKS (MATRIKS * M, int NB, int NK);
 4 5 6
 8 9 10
 */
-void TulisMATRIKS (MATRIKS M);
+
+void TulisMATRIKS (MATRIKS M) {
+    // KAMUS LOKAL
+    int i,j;
+    int LastBrs = GetLastIdxBrs(M);
+    int LastKol = GetLastIdxKol(M);
+    // ALGORITMA
+    for (i=1;i<LastBrs;i++) {
+        if (LastKol>1) {
+            for (j=1;j<LastKol;j++) {
+                printf("%d ",Elmt(M,i,j));
+            }
+        }
+        printf("%d",Elmt(M,i,LastKol));
+        printf("\n");
+        }
+    if (LastKol>1) {
+        for (j=1;j<LastKol;j++) {
+            printf("%d ",Elmt(M,LastBrs,j));
+        }
+    }
+    printf("%d",Elmt(M,LastBrs,LastKol));
+    printf("\n");
+}
 /* I.S. M terdefinisi */
 /* F.S. Nilai M(i,j) ditulis ke layar per baris per kolom, masing-masing elemen per baris
    dipisahkan sebuah spasi */
@@ -117,35 +139,121 @@ void TulisMATRIKS (MATRIKS M);
 */
 
 /* ********** KELOMPOK OPERASI ARITMATIKA TERHADAP TYPE ********** */
-MATRIKS TambahMATRIKS (MATRIKS M1, MATRIKS M2);
+MATRIKS TambahMATRIKS (MATRIKS M1, MATRIKS M2) {
+    // KAMUS LOKAL
+    MATRIKS MHsl;
+    int i,j;
+    int LastBrs = GetLastIdxBrs(M1);
+    int LastKol = GetLastIdxKol(M1);
+    // ALGORITMA
+    MakeMATRIKS(LastBrs,LastKol,&MHsl);
+    for (i=1;i<=LastBrs;i++) {
+        for (j=1;j<=LastKol;j++) {
+            Elmt(MHsl,i,j) = Elmt(M1,i,j) + Elmt(M2,i,j);
+        }
+    }
+    return(MHsl);
+}
 /* Prekondisi : M1  berukuran sama dengan M2 */
 /* Mengirim hasil penjumlahan matriks: M1 + M2 */
-MATRIKS KurangMATRIKS (MATRIKS M1, MATRIKS M2);
+
+MATRIKS KurangMATRIKS (MATRIKS M1, MATRIKS M2) {
+// KAMUS LOKAL
+    MATRIKS MHsl;
+    int i,j;
+    int LastBrs = GetLastIdxBrs(M1);
+    int LastKol = GetLastIdxKol(M1);
+    // ALGORITMA
+    MakeMATRIKS(LastBrs,LastKol,&MHsl);
+    for (i=1;i<=LastBrs;i++) {
+        for (j=1;j<=LastKol;j++) {
+            Elmt(MHsl,i,j) = Elmt(M1,i,j) - Elmt(M2,i,j);
+        }
+    }
+    return(MHsl);
+}
 /* Prekondisi : M berukuran sama dengan M */
 /* Mengirim hasil pengurangan matriks: salinan M1 – M2 */
+
 MATRIKS KaliMATRIKS (MATRIKS M1, MATRIKS M2);
 /* Prekondisi : Ukuran kolom efektif M1 = ukuran baris efektif M2 */
 /* Mengirim hasil perkalian matriks: salinan M1 * M2 */
-MATRIKS KaliKons (MATRIKS M, ElType X);
+MATRIKS KaliKons (MATRIKS M, ElType X) {
+// KAMUS LOKAL
+    MATRIKS MHsl;
+    int i,j;
+    int LastBrs = GetLastIdxBrs(M);
+    int LastKol = GetLastIdxKol(M);
+    // ALGORITMA
+    MakeMATRIKS(LastBrs,LastKol,&MHsl);
+    for (i=1;i<=LastBrs;i++) {
+        for (j=1;j<=LastKol;j++) {
+            Elmt(MHsl,i,j) = Elmt(M,i,j) * X;
+        }
+    }
+    return(MHsl);
+}
 /* Mengirim hasil perkalian setiap elemen M dengan X */
+
 void PKaliKons (MATRIKS * M, ElType K);
 /* I.S. M terdefinisi, K terdefinisi */
 /* F.S. Mengalikan setiap elemen M dengan K */
 
 /* ********** KELOMPOK OPERASI RELASIONAL TERHADAP MATRIKS ********** */
-boolean EQ (MATRIKS M1, MATRIKS M2);
+boolean EQ (MATRIKS M1, MATRIKS M2) {
+    // KAMUS LOKAL
+    int i = GetFirstIdxBrs(M1);
+    int j = GetFirstIdxKol(M1);
+    int LastBrs = GetLastIdxBrs(M1);
+    int LastKol = GetLastIdxKol(M1);
+    boolean eq = true;
+    // ALGORITMA
+    if (NBElmt(M1) == NBElmt(M2)) {
+        while ((i<=LastBrs) && (eq == true)) {
+            while ((j<=LastKol) && (eq == true)) {
+                if (Elmt(M1,i,j) != Elmt(M2,i,j)) {eq = false;}
+                j++;
+            }
+            i++;
+            j = GetFirstIdxBrs(M1);
+        }
+    } else {eq = false;}
+    return(eq);
+}
+
 /* Mengirimkan true jika M1 = M2, yaitu NBElmt(M1) = NBElmt(M2) dan */
 /* untuk setiap i,j yang merupakan indeks baris dan kolom M1(i,j) = M2(i,j) */
 /* Juga merupakan strong EQ karena GetFirstIdxBrs(M1) = GetFirstIdxBrs(M2)
    dan GetLastIdxKol(M1) = GetLastIdxKol(M2) */
-boolean NEQ (MATRIKS M1, MATRIKS M2);
+boolean NEQ (MATRIKS M1, MATRIKS M2) {
+    // KAMUS LOKAL
+    int i = GetFirstIdxBrs(M1);
+    int j = GetFirstIdxKol(M1);
+    int LastBrs = GetLastIdxBrs(M1);
+    int LastKol = GetLastIdxKol(M1);
+    boolean eq = false;
+    // ALGORITMA
+    if (NBElmt(M1) == NBElmt(M2)) {
+        while ((i<=LastBrs) && (eq == false)) {
+            while ((j<=LastKol) && (eq == false)) {
+                if (Elmt(M1,i,j) != Elmt(M2,i,j)) {eq = true;}
+                j++;
+            }
+            i++;
+            j = GetFirstIdxBrs(M1);
+        }
+    } else {eq = true;}
+    return(eq);
+}
 /* Mengirimkan true jika M1 tidak sama dengan M2 */
 boolean EQSize (MATRIKS M1, MATRIKS M2);
 /* Mengirimkan true jika ukuran efektif matriks M1 sama dengan ukuran efektif M2 */
 /* yaitu GetBrsEff(M1) = GetNBrsEff (M2) dan GetNKolEff (M1) = GetNKolEff (M2) */
 
 /* ********** Operasi lain ********** */
-int NBElmt (MATRIKS M);
+int NBElmt (MATRIKS M) {
+    return(GetLastIdxBrs(M)*GetLastIdxKol(M));
+}
 /* Mengirimkan banyaknya elemen M */
 
 /* ********** KELOMPOK TEST TERHADAP MATRIKS ********** */
@@ -171,5 +279,3 @@ void PInverse1 (MATRIKS * M);
 void Transpose (MATRIKS * M);
 /* I.S. M terdefinisi dan IsBujursangkar(M) */
 /* F.S. M "di-transpose", yaitu setiap elemen M(i,j) ditukar nilainya dengan elemen M(j,i) */
-
-#endif

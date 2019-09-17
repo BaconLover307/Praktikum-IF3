@@ -1,56 +1,50 @@
 /* Nama         : Gregorius Jovan Kresnadi */
 /* NIM          : 13518135 */
-/* Tanggal      : 11-09-2019 */
-/* Program      : arraydin_driver.c */
-/* Deskripsi    : Driver ADT Array Dinamis */
+/* Tanggal      : 17-09-2019 */
+/* Program      : matriks_driver.c */
+/* Deskripsi    : Driver ADT Matriks */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "arraydin.h"
+#include "matriks.h"
 
 int main()
 {
     // DICTIONARY
-    TabInt T1, T2, T3, T4;
-    IdxType i,n;
+    MATRIKS M1, M2, MPlus, MMin, MKaliX;
+    indeks i,n;
     boolean bool;
     ElType Mx = 0;
     ElType Mn = 0;
     // INPUT / OUTPUT
     /* #### START ####
-    T3 = PlusMinusTab(T1,T2,true);
-    TulisIsiTab(T3);
+    CopyMATRIKS(M1,&M2);
+
+    MPlus = TambahMATRIKS(M1,M2);
+    TulisMATRIKS(MPlus);
     printf("\n");
-    T4 = PlusMinusTab(T1,T2,false);
-    TulisIsiTab(T4);
+
+    MMin = KurangMATRIKS(M1,M2);
+    TulisMATRIKS(MMin);
     printf("\n");
-    bool = IsEQ(T1,T2);
-    if (!bool) {printf("Beda");} else {printf("Sama");}
-    n = Search1(T1,3);
-    bool = SearchB(T1,3);
-    if (bool) {printf("Found");}
-    MaxMin(T1,&Mx,&Mn);
-    printf("Max = %d, Min = %d\n",Mx,Mn);
-    CopyTab(T1,&T3);
-    TulisIsiTab(T3);
-    n = CountX(T1,1);
-    printf("%d\n",n);
-    AddAsLastEl(&T1,99);
-    n = 99;
-    DelLastEl(&T1,&n);
+
+    MKaliX = KaliKons(M1,10);
+    TulisMATRIKS(MKaliX);
+    printf("\n");
+
        ####  END  #### */
-    MakeEmpty(&T2,10);
-    MakeEmpty(&T1,10);
-    BacaIsi(&T1);
-    TulisIsiTab(T1);
+    BacaMATRIKS(&M1,2,2);
     printf("\n");
-    BacaIsi(&T2);
-    TulisIsiTab(T2);
+    TulisMATRIKS(M1);
     printf("\n");
-    Sort(&T1,true);
-    TulisIsiTab(T1);
-    Sort(&T2,false);
-    TulisIsiTab(T2);
+    
+    BacaMATRIKS(&M2,2,2);
+    printf("\n");
+    TulisMATRIKS(M2);
+    printf("\n");
+
+    if (EQ(M1,M2)) {printf("sama\n");}
+    if (NEQ(M1,M2)) {printf("beda\n");}
 
     return 0;
 }
