@@ -175,16 +175,35 @@ MATRIKS KurangMATRIKS (MATRIKS M1, MATRIKS M2) {
 /* Prekondisi : M berukuran sama dengan M */
 /* Mengirim hasil pengurangan matriks: salinan M1 – M2 */
 
-MATRIKS KaliMATRIKS (MATRIKS M1, MATRIKS M2);
+MATRIKS KaliMATRIKS (MATRIKS M1, MATRIKS M2) {
+// KAMUS LOKAL
+    MATRIKS MHsl;
+    int i,j,k;
+    int LastBrs = GetLastIdxBrs(M1);
+    int LastKol = GetLastIdxKol(M2);
+    int Mid = GetLastIdxKol(M1);
+    int temp = 0;
+// ALGORITMA
+    MakeMATRIKS(LastBrs,LastKol,&MHsl);
+    for (i=1;i<=LastBrs;i++) {
+        for (j=1;j<=LastKol;j++) {
+            for (k=1;k<=Mid;k++) {temp += Elmt(M1,i,k) * Elmt(M2,k,j);}
+            Elmt(MHsl,i,j) = temp;
+            temp = 0;
+        }
+    }
+    return(MHsl);
+}
 /* Prekondisi : Ukuran kolom efektif M1 = ukuran baris efektif M2 */
 /* Mengirim hasil perkalian matriks: salinan M1 * M2 */
+
 MATRIKS KaliKons (MATRIKS M, ElType X) {
 // KAMUS LOKAL
     MATRIKS MHsl;
     int i,j;
     int LastBrs = GetLastIdxBrs(M);
     int LastKol = GetLastIdxKol(M);
-    // ALGORITMA
+// ALGORITMA
     MakeMATRIKS(LastBrs,LastKol,&MHsl);
     for (i=1;i<=LastBrs;i++) {
         for (j=1;j<=LastKol;j++) {
@@ -195,7 +214,20 @@ MATRIKS KaliKons (MATRIKS M, ElType X) {
 }
 /* Mengirim hasil perkalian setiap elemen M dengan X */
 
-void PKaliKons (MATRIKS * M, ElType K);
+void PKaliKons (MATRIKS * M, ElType K) {
+// KAMUS LOKAL
+    int i, j;
+    int LastBrs = GetLastIdxBrs(*M);
+    int LastKol = GetLastIdxKol(*M);
+// ALGORITMA
+    for (i = 1; i <= LastBrs; i++)
+    {
+        for (j = 1; j <= LastKol; j++)
+        {
+            Elmt(*M, i, j) = Elmt(*M, i, j) * K;
+        }
+    }
+}
 /* I.S. M terdefinisi, K terdefinisi */
 /* F.S. Mengalikan setiap elemen M dengan K */
 
@@ -208,7 +240,7 @@ boolean EQ (MATRIKS M1, MATRIKS M2) {
     int LastKol = GetLastIdxKol(M1);
     boolean eq = true;
     // ALGORITMA
-    if (NBElmt(M1) == NBElmt(M2)) {
+    if (EQSize(M1,M2)) {
         while ((i<=LastBrs) && (eq == true)) {
             while ((j<=LastKol) && (eq == true)) {
                 if (Elmt(M1,i,j) != Elmt(M2,i,j)) {eq = false;}
@@ -231,22 +263,24 @@ boolean NEQ (MATRIKS M1, MATRIKS M2) {
     int j = GetFirstIdxKol(M1);
     int LastBrs = GetLastIdxBrs(M1);
     int LastKol = GetLastIdxKol(M1);
-    boolean eq = false;
+    boolean neq = false;
     // ALGORITMA
-    if (NBElmt(M1) == NBElmt(M2)) {
-        while ((i<=LastBrs) && (eq == false)) {
-            while ((j<=LastKol) && (eq == false)) {
-                if (Elmt(M1,i,j) != Elmt(M2,i,j)) {eq = true;}
+    if (EQSize(M1,M2)) {
+        while ((i<=LastBrs) && (neq == false)) {
+            while ((j<=LastKol) && (neq == false)) {
+                if (Elmt(M1,i,j) != Elmt(M2,i,j)) {neq = true;}
                 j++;
             }
             i++;
             j = GetFirstIdxBrs(M1);
         }
-    } else {eq = true;}
-    return(eq);
+    } else {neq = true;}
+    return(neq);
 }
 /* Mengirimkan true jika M1 tidak sama dengan M2 */
-boolean EQSize (MATRIKS M1, MATRIKS M2);
+boolean EQSize (MATRIKS M1, MATRIKS M2) {
+    return((GetLastIdxKol(M1)==GetLastIdxKol(M2)) && (GetLastIdxBrs(M1)==GetLastIdxBrs(M2)));
+}
 /* Mengirimkan true jika ukuran efektif matriks M1 sama dengan ukuran efektif M2 */
 /* yaitu GetBrsEff(M1) = GetNBrsEff (M2) dan GetNKolEff (M1) = GetNKolEff (M2) */
 
@@ -257,25 +291,122 @@ int NBElmt (MATRIKS M) {
 /* Mengirimkan banyaknya elemen M */
 
 /* ********** KELOMPOK TEST TERHADAP MATRIKS ********** */
-boolean IsBujurSangkar (MATRIKS M);
+boolean IsBujurSangkar (MATRIKS M) {
+    return(GetLastIdxBrs(M) == GetLastIdxKol(M));
+}
 /* Mengirimkan true jika M adalah matriks dg ukuran baris dan kolom sama */
-boolean IsSimetri (MATRIKS M);
+
+boolean IsSimetri (MATRIKS M) {
+// KAMUS LOKAL
+    int i = GetFirstIdxBrs(M);
+    int j = GetFirstIdxKol(M);
+    int LastBrs = GetLastIdxBrs(M);
+    int LastKol = GetLastIdxKol(M);
+    boolean sym = true;
+// ALGORITMA
+    if (IsBujurSangkar(M)) {
+        while ((i<=LastBrs) && (sym == true)) {
+            while ((j<=LastKol) && (sym == true)) {
+                if (Elmt(M,i,j) != Elmt(M,j,i)) {sym = false;}
+                j++;
+            }
+            i++;
+            j = GetFirstIdxBrs(M);
+        }
+    } else {sym = false;}
+    return(sym);
+}
 /* Mengirimkan true jika M adalah matriks simetri : IsBujurSangkar(M)
    dan untuk setiap elemen M, M(i,j)=M(j,i) */
-boolean IsSatuan (MATRIKS M);
+
+boolean IsSatuan (MATRIKS M) {
+// KAMUS LOKAL
+    int i = GetFirstIdxBrs(M);
+    int j = GetFirstIdxKol(M);
+    int LastBrs = GetLastIdxBrs(M);
+    int LastKol = GetLastIdxKol(M);
+    boolean id = true;
+// ALGORITMA
+    if (IsBujurSangkar(M)) {
+        for (i=GetFirstIdxBrs(M);i<=LastBrs;i++) {
+            for (j=GetFirstIdxKol(M);j<=LastKol;j++) {
+                if (i==j) {
+                    if (Elmt(M,i,j) != 1) {id = false;}
+                } else {
+                    if (Elmt(M,i,j) != 0) {id = false;}
+                }
+            }
+        }
+    } else {id = false;}
+    return(id);
+}
+
 /* Mengirimkan true jika M adalah matriks satuan: IsBujurSangkar(M) dan
    setiap elemen diagonal M bernilai 1 dan elemen yang bukan diagonal bernilai 0 */
-boolean IsSparse (MATRIKS M);
-/* Mengirimkan true jika M adalah matriks sparse: mariks “jarang” dengan definisi:
+boolean IsSparse (MATRIKS M) {
+// KAMUS LOKAL
+    int i,j;
+    int LastBrs = GetLastIdxBrs(M);
+    int LastKol = GetLastIdxKol(M);
+    int count = 0;
+// ALGORITMA
+    for (i=GetFirstIdxBrs(M);i<=LastBrs;i++) {
+        for (j=GetFirstIdxKol(M);j<=LastKol;j++) {
+            if (Elmt(M,i,j) != 0) {count += 1;}
+        }
+    }
+    return((20*count <= NBElmt(M)));
+}
+/* Mengirimkan true jika M adalah matriks sparse: matriks “jarang” dengan definisi:
    hanya maksimal 5% dari memori matriks yang efektif bukan bernilai 0 */
-MATRIKS Inverse1 (MATRIKS M);
+
+MATRIKS Inverse1 (MATRIKS M) {
+// KAMUS LOKAL
+    int i,j;
+    int LastBrs = GetLastIdxBrs(M);
+    int LastKol = GetLastIdxKol(M);
+// ALGORITMA
+    for (i=GetFirstIdxBrs(M);i<=LastBrs;i++) {
+        for (j=GetFirstIdxKol(M);j<=LastKol;j++) {
+            Elmt(M,i,j) *= -1;
+        }
+    }
+    return(M);
+}
 /* Menghasilkan salinan M dengan setiap elemen "di-invers", yaitu dinegasikan (dikalikan -1) */
+
 float Determinan (MATRIKS M);
 /* Prekondisi: IsBujurSangkar(M) */
 /* Menghitung nilai determinan M */
-void PInverse1 (MATRIKS * M);
+
+void PInverse1 (MATRIKS * M) {
+// KAMUS LOKAL
+    int i,j;
+    int LastBrs = GetLastIdxBrs(*M);
+    int LastKol = GetLastIdxKol(*M);
+// ALGORITMA
+    for (i=GetFirstIdxBrs(*M);i<=LastBrs;i++) {
+        for (j=GetFirstIdxKol(*M);j<=LastKol;j++) {
+            Elmt(*M,i,j) *= -1;
+        }
+    }
+}
 /* I.S. M terdefinisi */
 /* F.S. M di-invers, yaitu setiap elemennya dinegasikan (dikalikan -1) */
-void Transpose (MATRIKS * M);
+
+void Transpose (MATRIKS * M) {
+// KAMUS LOKAL
+    int i,j;
+    int LastBrs = GetLastIdxBrs(*M);
+    int LastKol = GetLastIdxKol(*M);
+    MATRIKS tempM;
+// ALGORITMA
+    CopyMATRIKS(*M,&tempM);
+    for (i=GetFirstIdxBrs(*M);i<=LastBrs;i++) {
+        for (j=GetFirstIdxKol(*M);j<=LastKol;j++) {
+            Elmt(*M,j,i) = Elmt(tempM,i,j);
+        }
+    }
+}
 /* I.S. M terdefinisi dan IsBujursangkar(M) */
 /* F.S. M "di-transpose", yaitu setiap elemen M(i,j) ditukar nilainya dengan elemen M(j,i) */

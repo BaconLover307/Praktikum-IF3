@@ -11,7 +11,7 @@
 int main()
 {
     // DICTIONARY
-    MATRIKS M1, M2, MPlus, MMin, MKaliX;
+    MATRIKS M1, M2, M3, MPlus, MMin, MKali, MKaliX;
     indeks i,n;
     boolean bool;
     ElType Mx = 0;
@@ -32,19 +32,28 @@ int main()
     TulisMATRIKS(MKaliX);
     printf("\n");
 
-       ####  END  #### */
-    BacaMATRIKS(&M1,2,2);
-    printf("\n");
-    TulisMATRIKS(M1);
-    printf("\n");
-    
-    BacaMATRIKS(&M2,2,2);
-    printf("\n");
-    TulisMATRIKS(M2);
-    printf("\n");
-
     if (EQ(M1,M2)) {printf("sama\n");}
     if (NEQ(M1,M2)) {printf("beda\n");}
 
+    MKali = KaliMATRIKS(M1,M2);
+    TulisMATRIKS(MKali);
+    printf("\n");
+    
+    BacaMATRIKS(&M2,4,5);
+    printf("\n");
+
+    M3 = Inverse1(M1);
+    TulisMATRIKS(M3);
+    printf("Invers1\n");
+    printf("\n");
+    PInverse1(&M3);
+    TulisMATRIKS(M3);
+    printf("PInvers1\n");
+    ####  END  #### */
+    BacaMATRIKS(&M1,3,3);
+    printf("\n");
+    Transpose(&M1);
+    TulisMATRIKS(M1);
+    printf("\n");
     return 0;
 }
