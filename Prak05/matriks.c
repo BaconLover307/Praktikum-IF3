@@ -9,7 +9,6 @@
 #include "matriks.h"
 #include <stdio.h>
 
-
 /* ********** DEFINISI PROTOTIPE PRIMITIF ********** */
 /* *** Konstruktor membentuk MATRIKS *** */
 void MakeMATRIKS (int NB, int NK, MATRIKS * M) {
@@ -48,9 +47,10 @@ indeks GetLastIdxKol (MATRIKS M) {
 /* Mengirimkan indeks kolom terbesar M */
 
 boolean IsIdxEff (MATRIKS M, indeks i, indeks j) {
-    return(i==NBrsEff(M) && j==NKolEff(M));
+    return((i>=BrsMin) && (i<=GetLastIdxBrs(M)) && (j>=KolMin) && (j<=GetLastIdxKol(M)));
 }
 /* Mengirimkan true jika i, j adalah indeks efektif bagi M */
+
 ElType GetElmtDiagonal (MATRIKS M, indeks i) {
     return(Elmt(M,i,i));
 }
@@ -126,7 +126,6 @@ void TulisMATRIKS (MATRIKS M) {
         }
     }
     printf("%d",Elmt(M,LastBrs,LastKol));
-    printf("\n");
 }
 /* I.S. M terdefinisi */
 /* F.S. Nilai M(i,j) ditulis ke layar per baris per kolom, masing-masing elemen per baris
@@ -375,7 +374,53 @@ MATRIKS Inverse1 (MATRIKS M) {
 }
 /* Menghasilkan salinan M dengan setiap elemen "di-invers", yaitu dinegasikan (dikalikan -1) */
 
-float Determinan (MATRIKS M);
+/* ********** FUNGSI ANTARA DETERMINAN ********** */
+MATRIKS DelBrsKol(MATRIKS M, indeks Brs, indeks Kol) {
+// KAMUS LOKAL
+    MATRIKS MHsl;
+    indeks i,j;
+    indeks iHsl = 0;
+    indeks jHsl = 0;
+// ALGORITMA
+    MakeMATRIKS((GetLastIdxBrs(M)-1),(GetLastIdxKol(M)-1),&MHsl);
+    // Isi Matriks
+    for (i=GetFirstIdxBrs(M); i<=GetLastIdxBrs(M); i++) {
+        if (i != Brs) {
+            iHsl++;
+            for (j=GetFirstIdxKol(M); j<=GetLastIdxKol(M); j++) {
+                if (j != Kol) {
+                    jHsl++;
+                    Elmt(MHsl,iHsl,jHsl) = Elmt(M,i,j);
+                }
+            }
+            jHsl = 0;
+        }
+    }
+    return MHsl;
+}
+/* I.S. M terdefinisi */
+/* F.S. M berkurang 1 baris dan 1 kolom, sesuai baris dan kolom yang dipilih untuk dibuang */
+
+float Determinan (MATRIKS M) {
+// KAMUS LOKAL
+    float det = 0;
+    indeks j;
+// ALGORITMA
+    if (NBElmt(M)==1) {
+        det = NBElmt(M);
+    } else if (NBElmt(M)==4) {
+        det = ((Elmt(M, 1, 1) * Elmt(M, 2, 2)) - (Elmt(M, 1, 2)*Elmt(M,2,1)));
+    } else {
+        for (j=(GetFirstIdxKol(M)); j<=GetLastIdxKol(M); j++) {
+            if (j%2 == 1) {
+                det += Elmt(M,1,j) * Determinan(DelBrsKol(M,1,j));
+            } else {
+                det += Elmt(M,1,j) * (-1) * Determinan(DelBrsKol(M,1,j));
+            }
+        }
+    }
+    return(det);
+}
 /* Prekondisi: IsBujurSangkar(M) */
 /* Menghitung nilai determinan M */
 

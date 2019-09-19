@@ -124,6 +124,11 @@ boolean IsSparse (MATRIKS M);
    hanya maksimal 5% dari memori matriks yang efektif bukan bernilai 0 */
 MATRIKS Inverse1 (MATRIKS M);
 /* Menghasilkan salinan M dengan setiap elemen "di-invers", yaitu dinegasikan (dikalikan -1) */
+/* ********** FUNGSI ANTARA DETERMINAN ********** */
+MATRIKS DelBrsKol(MATRIKS M, indeks Brs, indeks Kol);
+/* I.S. M terdefinisi */
+/* F.S. M berkurang 1 baris dan 1 kolom, sesuai baris dan kolom yang dipilih untuk dibuang */
+ /* **********       ********** */
 float Determinan (MATRIKS M);
 /* Prekondisi: IsBujurSangkar(M) */
 /* Menghitung nilai determinan M */

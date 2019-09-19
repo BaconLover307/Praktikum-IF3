@@ -12,7 +12,8 @@ int main()
 {
     // DICTIONARY
     MATRIKS M1, M2, M3, MPlus, MMin, MKali, MKaliX;
-    indeks i,n;
+    indeks i;
+    float n;
     boolean bool;
     ElType Mx = 0;
     ElType Mn = 0;
@@ -52,8 +53,6 @@ int main()
     ####  END  #### */
     BacaMATRIKS(&M1,3,3);
     printf("\n");
-    Transpose(&M1);
-    TulisMATRIKS(M1);
-    printf("\n");
+    printf("Determinan: %.2f\n",Determinan(M1));
     return 0;
 }
