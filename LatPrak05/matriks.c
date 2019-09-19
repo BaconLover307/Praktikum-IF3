@@ -47,7 +47,7 @@ indeks GetLastIdxKol (MATRIKS M) {
 /* Mengirimkan indeks kolom terbesar M */
 
 boolean IsIdxEff (MATRIKS M, indeks i, indeks j) {
-    return((i>=BrsMin) && (i<=GetLastIdxBrs(M)) && (j>=KolMin) && (j<=GetLastIdxKol(M)));
+    return((i>=GetFirstIdxBrs(M)) && (i<=GetLastIdxBrs(M)) && (j>=GetFirstIdxKol(M)) && (j<=GetLastIdxKol(M)));
 }
 /* Mengirimkan true jika i, j adalah indeks efektif bagi M */
 
