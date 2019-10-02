@@ -2,9 +2,9 @@
 #include"mesinkata.h"
 
 void Salin(Kata* dest, Kata src) {
-    while (CC != BLANK) {
-        for (int i=1; i <= src.Length; i++) {
-            (*dest).TabKata[i] = src.TabKata[i];        }
+    (*dest).Length = src.Length;
+    for (int i=1; i <= src.Length; i++) {
+        (*dest).TabKata[i] = src.TabKata[i];
     }
 }
 /* Menyalin kata
@@ -16,25 +16,23 @@ int main() {
     int n = 0;
     Kata pattern;
     boolean sama;
-    Salin(&pattern,CKata);
     STARTKATA();
-        for(int i=1;i<=pattern.Length;i++) {
-                printf("%c",CKata.TabKata[i]);
-            }
+    Salin(&pattern,CKata);
     ADVKATA();
+    
     while (!EndKata) {
-        sama = true;
-        for(int i=1;i<=pattern.Length;i++) {
-            if (CKata.TabKata[i] != pattern.TabKata[i]) {
-                printf("%c",CKata.TabKata[i]);
-                sama = false;
-                ADVKATA();
+        for(int i=1;i<=CKata.Length;i++) {
+            sama = false;
+            int j = 1;
+            while ((i<=CKata.Length) && (CKata.TabKata[i]==pattern.TabKata[j])) {
+                sama = true;
+                i += 1;
+                j += 1;
             }
-        if (sama) 
-            n += 1;
-            ADVKATA();
+            if (sama) n += 1;
         }
+        ADVKATA();
     }
-    printf("n\n");
+    printf("%d\n",n);
     return 0;
 }
