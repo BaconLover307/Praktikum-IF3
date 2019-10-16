@@ -1,9 +1,10 @@
-/* File : queue.h */
-/* Definisi ADT Queue dengan representasi array secara eksplisit dan alokasi dinamik */
+/* File : prioqueue.h */
+/* Definisi ADT Priority Queue dengan representasi array secara eksplisit dan alokasi dinamik */
 /* Model Implementasi Versi III dengan circular buffer */
+/* Elemen queue terurut tidak mengecil berdasarkan elemen prio */
 
-#ifndef queue_H
-#define queue_H
+#ifndef prioqueue_H
+#define prioqueue_H
 
 #include "boolean.h"
 
@@ -11,25 +12,32 @@
 /* Konstanta untuk mendefinisikan address tak terdefinisi */
 
 /* Definisi elemen dan address */
-typedef int infotype;
+typedef struct {
+    int prio;  /* [1..3], prioritas dengan nilai 1..3 (3 adalah prioritas tertinggi) */
+    int nilai;  /* elemen karakter */
+} infotype;
 typedef int address;   /* indeks tabel */
 /* Contoh deklarasi variabel bertype Queue : */
 /* Versi I : tabel dinamik, Head dan Tail eksplisit, ukuran disimpan */
-typedef struct { infotype * T;   /* tabel penyimpan elemen */
-                 address HEAD;  /* alamat penghapusan */
-                 address TAIL;  /* alamat penambahan */
-                 int MaxEl;     /* Max elemen queue */
-               } Queue;
+typedef struct {
+    infotype * T;   /* tabel penyimpan elemen */
+    address HEAD;  /* alamat penghapusan */
+    address TAIL;  /* alamat penambahan */
+    int MaxEl;     /* Max elemen queue */
+} Queue;
 /* Definisi Queue kosong: HEAD=Nil; TAIL=Nil. */
 /* Catatan implementasi: T[0] tidak pernah dipakai */
 
 /* ********* AKSES (Selektor) ********* */
-/* Jika Q adalah Queue, maka akses elemen : */
-#define Head(Q) (Q).HEAD
-#define Tail(Q) (Q).TAIL
+/* Jika e adalah infotype dan Q adalah Queue, maka akses elemen : */
+#define Prio(e)     (e).prio
+#define Nilai(e)    (e).nilai
+#define Head(Q)     (Q).HEAD
+#define Tail(Q)     (Q).TAIL
 #define InfoHead(Q) (Q).T[(Q).HEAD]
 #define InfoTail(Q) (Q).T[(Q).TAIL]
-#define MaxEl(Q) (Q).MaxEl
+#define MaxEl(Q)    (Q).MaxEl
+#define Elmt(Q,i)   (Q).T[(i)]
 
 /* ********* Prototype ********* */
 boolean IsEmpty (Queue Q);
@@ -56,13 +64,25 @@ void DeAlokasi(Queue * Q);
 
 /* *** Primitif Add/Delete *** */
 void Add (Queue * Q, infotype X);
-/* Proses: Menambahkan X pada Q dengan aturan FIFO */
+/* Proses: Menambahkan X pada Q dengan aturan priority queue, terurut mengecil berdasarkan prio */
 /* I.S. Q mungkin kosong, tabel penampung elemen Q TIDAK penuh */
-/* F.S. X menjadi TAIL yang baru, TAIL "maju" dengan mekanisme circular buffer */
+/* F.S. X disisipkan pada posisi yang tepat sesuai dengan prioritas,
+        TAIL "maju" dengan mekanisme circular buffer; */
 void Del (Queue * Q, infotype * X);
 /* Proses: Menghapus X pada Q dengan aturan FIFO */
 /* I.S. Q tidak mungkin kosong */
-/* F.S. X = nilai elemen HEAD pd I.S., HEAD "maju" dengan mekanisme circular buffer; 
+/* F.S. X = nilai elemen HEAD pd I.S., HEAD "maju" dengan mekanisme circular buffer;
         Q mungkin kosong */
+
+/* Operasi Tambahan */
+void PrintPrioQueue (Queue Q);
+/* Mencetak isi queue Q ke layar */
+/* I.S. Q terdefinisi, mungkin kosong */
+/* F.S. Q tercetak ke layar dengan format:
+<prio-1> <elemen-1>
+...
+<prio-n> <elemen-n>
+#
+*/
 
 #endif
