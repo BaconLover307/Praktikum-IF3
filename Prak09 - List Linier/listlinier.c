@@ -26,22 +26,29 @@
 // ? Setiap elemen dengan address P dapat diacu Info(P), Next(P)
 // ? Elemen terakhir list : jika addressnya Last, maka Next(Last)=Nil
 
-/* PROTOTYPE */
-/****************** TEST LIST KOSONG ******************/
+// ? #define Info(P) (P)->info
+// ? #define Next(P) (P)->next
+// ? #define First(L) ((L).First)
+
+
+// $ PROTOTYPE
+// $ ****************** TEST LIST KOSONG ******************
 boolean IsEmpty (List L) {
     return First(L) == Nil;
 }
 /* Mengirim true jika list kosong */
 
-/****************** PEMBUATAN LIST KOSONG ******************/
+// $ ****************** PEMBUATAN LIST KOSONG ******************
 void CreateEmpty (List *L) {
     First(*L) = Nil;
 }
 /* I.S. sembarang             */
 /* F.S. Terbentuk list kosong */
 
-/****************** Manajemen Memori ******************/
-address Alokasi (infotype X);
+// $ ****************** Manajemen Memori ******************
+address Alokasi (infotype X) {
+
+}
 /* Mengirimkan address hasil alokasi sebuah elemen */
 /* Jika alokasi berhasil, maka address tidak nil, dan misalnya */
 /* menghasilkan P, maka Info(P)=X, Next(P)=Nil */
@@ -51,15 +58,35 @@ void Dealokasi (address *P);
 /* F.S. P dikembalikan ke sistem */
 /* Melakukan dealokasi/pengembalian address P */
 
-/****************** PENCARIAN SEBUAH ELEMEN LIST ******************/
-address Search (List L, infotype X);
+// $ ****************** PENCARIAN SEBUAH ELEMEN LIST ******************
+address Search (List L, infotype X) {
+    // $ Kamus Lokal
+    address P = First(L);
+    boolean Found = false;
+    // $ Algoritma
+    while (P != Nil && !Found) {
+        if (X == Info(P)) {
+            Found = true;   // Jika Found maka P = address dari harga yang dicari
+        } else {
+            P = Next(P);    // Jika not Found maka P = Nil   
+        }
+    }
+}
 /* Mencari apakah ada elemen list dengan Info(P)= X */
 /* Jika ada, mengirimkan address elemen tersebut. */
 /* Jika tidak ada, mengirimkan Nil */
 
 /****************** PRIMITIF BERDASARKAN NILAI ******************/
 /*** PENAMBAHAN ELEMEN ***/
-void InsVFirst (List *L, infotype X);
+void InsVFirst (List *L, infotype X) {
+    // $ Kamus Lokal
+    address P = Alokasi(X);
+    // $ Algoritma
+    if (P != Nil) {
+        Next(P) = First(*L);
+        First(*L) = P;
+    }
+}
 /* I.S. L mungkin kosong */
 /* F.S. Melakukan alokasi sebuah elemen dan */
 /* menambahkan elemen pertama dengan nilai X jika alokasi berhasil */
