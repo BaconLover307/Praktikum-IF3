@@ -26,7 +26,6 @@ int main() {
 	// BACA
     for (int i = 1; i<=n; i++) {
 		scanf("%d",&isin);
-		if (!IsFull(Sn)) {
 			if (isin == 0) {
 				if (!IsEmpty(Sn)) {
 					Pop(&Sn,&buang);
@@ -34,12 +33,10 @@ int main() {
 			} else {
 				Push(&Sn,isin);
 			}
-		}
     }
     
     for (int j = 1; j<=m; j++) {
 		scanf("%d",&isim);
-		if (!IsFull(Sm)) {
 			if (isim == 0) {
 				if (!IsEmpty(Sm)) {
 					Pop(&Sm,&buang);
@@ -47,17 +44,18 @@ int main() {
 			} else if (isim != 0) {
 				Push(&Sm,isim);
 			}
-		}
 	}
     
     // HITUNG
     while (!IsEmpty(Sn)) {
 		Pop(&Sn,&plusn);
+		sumn *= 10;
 		sumn += plusn;
 	}
 	
     while (!IsEmpty(Sm)) {
 		Pop(&Sm,&plusm);
+		summ *= 10;
 		summ += plusm;
 	}
 	

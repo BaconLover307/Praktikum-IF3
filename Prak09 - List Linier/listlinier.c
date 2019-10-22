@@ -46,7 +46,7 @@ void CreateEmpty (List *L) {
 /* I.S. sembarang             */
 /* F.S. Terbentuk list kosong */
 
-// ! ****************** Manajemen Memori ******************
+// $ ****************** Manajemen Memori ******************
 address Alokasi (infotype X) {
     // $ Kamus Lokal
     address P;
@@ -122,21 +122,26 @@ void InsVLast (List *L, infotype X) {
 /* menambahkan elemen list di akhir: elemen terakhir yang baru */
 /* bernilai X jika alokasi berhasil. Jika alokasi gagal: I.S.= F.S. */
 
-// ! *** PENGHAPUSAN ELEMEN ***
+// $ *** PENGHAPUSAN ELEMEN ***
 void DelVFirst (List *L, infotype *X) {
     // $ Kamus Lokal
-    address Pa = Alokasi(*X);
-    // ! Algoritma
-    DelFirst(L,Pa);
-    *X = Info(Pa);
-    Dealokasi(Pa); 
+    address P = Alokasi(*X);
+    // $ Algoritma
+    DelFirst(L,&P);
+    *X = Info(P);
+    Dealokasi(&P); 
 }
 /* I.S. List L tidak kosong  */
 /* F.S. Elemen pertama list dihapus: nilai info disimpan pada X */
 /*      dan alamat elemen pertama di-dealokasi */
 
 void DelVLast (List *L, infotype *X) {
-
+    // $ Kamus Lokal
+    address P = Alokasi(*X);
+    // $ Algoritma
+    DelLast(L, &P);
+    *X = Info(P);
+    Dealokasi(&P);
 }
 /* I.S. list tidak kosong */
 /* F.S. Elemen terakhir list dihapus: nilai info disimpan pada X */
@@ -179,7 +184,7 @@ void InsertLast (List *L, address P) {
 /* I.S. Sembarang, P sudah dialokasi  */
 /* F.S. P ditambahkan sebagai elemen terakhir yang baru */
 
-// ! *** PENGHAPUSAN SEBUAH ELEMEN ***
+// $ *** PENGHAPUSAN SEBUAH ELEMEN ***
 void DelFirst (List *L, address *P) {
     *P = First(*L);
     First(*L) = Next(First(*L));
@@ -192,16 +197,21 @@ void DelFirst (List *L, address *P) {
 
 void DelP (List *L, infotype X) {
     // $ Kamus Lokal
-    address P,Prec;
-    // ? Algoritma
+    address P,Prec,Phead;
+    // $ Algoritma
     P = Search(*L,X);
     if (P == First(*L)) {
-        DelFirst(L,P);
-        Dealokasi(P);
+        DelFirst(L,&P);
+        Dealokasi(&P);
     } else if (P != Nil) {
-        Prec = Search(*L,X);
-        DelAfter(L,P,Prec);
-    }
+        Prec = First(*L);
+        Phead = Next(First(*L));
+        while (P != Phead) {
+            Phead = Next(Phead); // Jika not Found maka P = Nil
+            Prec = Next(Prec); // Jika not Found maka P = Nil
+            }
+        DelAfter(L,&P,Prec);
+        }
 }
 /* I.S. Sembarang */
 /* F.S. Jika ada elemen list beraddress P, dengan Info(P)=X  */

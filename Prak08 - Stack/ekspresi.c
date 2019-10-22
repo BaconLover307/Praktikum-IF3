@@ -18,6 +18,10 @@ int main() {
     // ALGORITMA
 	STARTTOKEN();
 	CreateEmpty(&S);
+	if (EndToken) {
+		printf("Ekspresi kosong\n");
+		return 0;
+	}
 	while(!EndToken) {
 		//SalinToken();
 		//printf("<%c,%d>\n",CToken.tkn,CToken.val);
@@ -32,12 +36,7 @@ int main() {
 			else if (CToken.tkn == '-') operasi = Op1 - Op2;
 			else if (CToken.tkn == '*') operasi = Op1 * Op2;
 			else if (CToken.tkn == '/') operasi = Op1 / Op2;
-			else if (CToken.tkn == '^') {
-				operasi = 1;
-				for (int i = 1; i<= Op2; i++) {
-					operasi *= Op1;
-				}
-			}
+			else if (CToken.tkn == '^') operasi = pow(Op1,Op2);
 			printf("%d\n",operasi);
 			Push(&S,operasi);
 		}	
