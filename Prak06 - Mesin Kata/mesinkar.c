@@ -37,3 +37,6 @@ void ADV() {
        fclose(pita);
     }
 }
+ void CLOSE() {
+     fclose(pita);
+ }
