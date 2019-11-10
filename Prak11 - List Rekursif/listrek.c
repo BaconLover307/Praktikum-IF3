@@ -1,6 +1,6 @@
 /* Nama             : Gregorius Jovan Kresnadi */
 /* NIM              : 13518135 */
-/* Tanggal          : 6-11-2019 */
+/* Tanggal          : 7-11-2019 */
 /* Program          : listdp.c */
 /* ADT List Rekursif */
 /* ADT list linier dengan representasi pointer */
@@ -210,3 +210,179 @@ boolean Search(List L, infotype X) {
     }
 }
 /* Mengirim true jika X adalah anggota list, false jika tidak */
+
+
+/*** Pencarian nilai ekstrim ***/
+/* Prekondisi untuk Max/Min/Sum/Average : List tidak kosong */
+infotype MaxList (List L) {
+	// Kamus Lokal
+	infotype maks = Info(L);   
+	infotype temp;
+	// Algoritma
+	
+	if (IsOneElmt(L)) {
+        return maks;
+    } else {
+		temp = MaxList(Tail(L));
+        if (maks <= temp) {
+            maks = temp;
+        }
+        return maks;
+    }
+}
+/* Mengirimkan nilai info(P) yang maksimum */
+
+infotype MinList (List L) {
+	// Kamus Lokal
+	infotype mins = Info(L);   
+	infotype temp;
+	// Algoritma
+	
+	if (IsOneElmt(L)) {
+        return mins;
+    } else {
+		temp = MinList(Tail(L));
+        if (mins >= temp) {
+            mins = temp;
+        }
+        return mins;
+    }
+}
+/* Mengirimkan nilai info(P) yang minimum */
+
+infotype SumList (List L) {
+	// $ Kamus Lokal
+
+    // $ Algoritma
+    if (IsOneElmt(L)) {
+        return Info(L);
+    } else {
+        return Info(L) + SumList(Tail(L));
+    }
+}
+/* Mengirimkan total jumlah elemen List L */
+
+float AverageList (List L) {
+	// $ Kamus Lokal
+	float sum,n;
+    // $ Algoritma
+    sum = SumList(L);
+    n = NbElmtList(L);
+    return sum/n;
+}
+/* Mengirimkan nilai rata-rata elemen list L */
+
+/*** Operasi-Operasi Lain ***/
+List InverseList (List L) {
+	// $ Kamus Lokal
+	infotype dpn;
+	address P;
+    // $ Algoritma
+    if (IsEmpty(L)) {
+		return L;
+	} else {
+		dpn = Info(L);
+		P = Alokasi(dpn);
+		if (P == Nil) {
+			return L;
+		} else {
+			return KonsB(InverseList(Tail(L)),dpn);
+    	}
+    }
+}
+/* Mengirimkan list baru, hasil invers dari L dengan menyalin semua elemen list.
+Semua elemen list baru harus dialokasi */
+/* Jika alokasi gagal, hasilnya list kosong */
+
+void SplitPosNeg (List L, List *L1, List *L2) {
+	// $ Kamus Lokal
+	infotype dpn;
+    // $ Algoritma
+    if (!IsEmpty(L)) {
+		dpn = Info(L);
+		if (dpn >=0) {
+			*L1 = KonsB(*L1,dpn);
+			SplitPosNeg(Tail(L),L1,L2);
+		} else {
+			*L2 = KonsB(*L2,dpn);
+			SplitPosNeg(Tail(L),L1,L2);
+		}
+	}
+}
+/* I.S. L mungkin kosong */
+/* F.S. Berdasarkan L, dibentuk dua buah list L1 dan L2 */ 
+/* L1 berisi semua elemen L yang positif atau 0, sedangkan L2 berisi
+semua elemen L yang negatif; semua dengan urutan yang sama seperti di L */
+/* L tidak berubah: Semua elemen L1 dan L2 harus dialokasi */
+/* Jika L kosong, maka L1 dan L2 kosong */
+
+void SplitOnX (List L, infotype X, List *L1, List *L2) {
+	// $ Kamus Lokal
+	infotype dpn;
+    // $ Algoritma
+    if (!IsEmpty(L)) {
+		dpn = Info(L);
+		if (dpn < X) {
+			*L1 = KonsB(*L1,dpn);
+			SplitOnX(Tail(L),X,L1,L2);
+		} else {
+			*L2 = KonsB(*L2,dpn);
+			SplitOnX(Tail(L),X,L1,L2);
+		}
+	}
+}
+/* I.S. L dan X terdefinisi, L1 dan L2 sembarang. */
+/* F.S. L1 berisi semua elemen L yang lebih kecil dari X, dengan urutan
+kemunculan yang sama, L2 berisi semua elemen L yang tidak masuk ke
+L1, dengan urutan kemunculan yang sama. */
+
+int ListCompare (List L1, List L2) {
+	
+    
+	// $ Kamus Lokal
+	int N1 = NbElmtList(L1);
+	int N2 = NbElmtList(L2);
+	boolean sama;
+	infotype dpn;
+    // $ Algoritma
+    if (IsEmpty(L1)) {
+        if (IsEmpty(L2)) {
+            return 0;
+        } else {
+            ----*
+        }
+		If (N1 = 0) {
+			return 0;
+		sama = true;
+*/		
+}
+/* Menghasilkan: -1 jika L1 < L2, 0 jika L1 = L2, dan 1 jika L1 > L2 */
+/* Jika L[i] adalah elemen L pada urutan ke-i dan |L| adalah panjang L: */
+/* L1 = L2: |L1| = |L2| dan untuk semua i, L1[i] = L2[i] */
+/* L1 < L2: Jika i adalah urutan elemen yang berbeda yang terkecil
+dari L1 dan L2, L1[i]<L2[i] atau: Jika pada semua elemen pada
+urutan i yang sama, L1[i]=L2[i], namun |L1|<|L2| */
+/* Contoh: [3,5,6,7] < [4,4,5,6]; [1,2,3]<[1,2,3,4] */
+/* L1>L2: kebalikan dari L1<L2 */
+
+boolean IsAllExist (List L1, List L2) {
+	// Kamus Lokal
+	infotype cari;
+	boolean found;
+	// Algoritma
+	if (IsEmpty(L1)) {
+		return false;
+	} else if (IsOneElmt(L1)) {
+		return Search(L2,Info(L1));
+	} else {
+		return Search(L2,Info(L1)) && IsAllExist(Tail(L1),L2);
+	}
+}
+		
+	
+	
+/* Menghasilkan true jika semua elemen dalam L1 terdapat dalam L2 (tanpa
+memperhatikan urutan ataupun banyaknya elemen).
+Kedua list mungkin kosong. Jika L1 kosong, maka hasilnya false. */
+
+

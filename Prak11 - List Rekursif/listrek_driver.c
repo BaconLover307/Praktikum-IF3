@@ -36,12 +36,47 @@ int main() {
     Found = Search(list1,X);
     if (Found) printf("Found\n");
     printf("------------------------------\n");
-	list2 = KonsB(list2, 1);
+	infotype maks = MaxList(list1);
+	printf("Maximum list 1 = %d\n",maks);
+	infotype mins = MinList(list1);
+	printf("Minimum list 1 = %d\n",mins);
+	infotype sum = SumList(list1);
+	printf("Jumlah isi list 1 = %d\n",sum);
+    printf("------------------------------\n");
+    printf("Inverse List1: \n");
+	List inverse = InverseList(list1);
+    PrintList(inverse);
+    printf("------------------------------\n");
+    printf("List2: \n");
+	list2 = KonsB(list2, -1);
     list2 = KonsB(list2, 2);
     list2 = KonsB(list2, 3);
-    printf("List2: \n");
+    list2 = KonsB(list2, -4);
+    list2 = KonsB(list2, -5);
     PrintList(list2);
     printf("------------------------------\n");
+	List pos = Nil;
+	List neg = Nil;
+	SplitPosNeg(list2,&pos,&neg);
+    printf("Positif dari List2: \n");
+    PrintList(pos);
+    printf("Negatif dari List2: \n");
+    PrintList(neg);
+    printf("------------------------------\n");
+	infotype batas = -1;
+	List bwh = Nil;
+	List atas = Nil;
+	SplitOnX(list2,batas,&bwh,&atas);
+    printf("Elmt List2 < %d: \n",batas);
+    PrintList(bwh);
+    printf("Elmt List2 >= %d: \n",batas);
+    PrintList(atas);
+    printf("------------------------------\n");
+	if (IsAllExist(list2,pos)) printf("Ketemu1\n");
+	if (IsAllExist(pos,neg)) printf("Ketemu2\n");
+	
+	
+	/*
     list11 = Copy(list1);
     printf("List11: \n");
     PrintList(list11);
@@ -58,6 +93,6 @@ int main() {
     printf("List4: \n");
     PrintList(list4);
     printf("------------------------------\n");
-
+	*/
 	return 0;
 }
