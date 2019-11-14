@@ -1,6 +1,6 @@
 /* Nama             : Gregorius Jovan Kresnadi */
 /* NIM              : 13518135 */
-/* Tanggal          : 7-11-2019 */
+/* Tanggal          : 13-11-2019 */
 /* Program          : listdp.c */
 /* ADT List Rekursif */
 /* ADT list linier dengan representasi pointer */
@@ -337,24 +337,24 @@ kemunculan yang sama, L2 berisi semua elemen L yang tidak masuk ke
 L1, dengan urutan kemunculan yang sama. */
 
 int ListCompare (List L1, List L2) {
-	
-    
 	// $ Kamus Lokal
-	int N1 = NbElmtList(L1);
-	int N2 = NbElmtList(L2);
-	boolean sama;
-	infotype dpn;
+
     // $ Algoritma
     if (IsEmpty(L1)) {
         if (IsEmpty(L2)) {
             return 0;
         } else {
-            ----*
+            return -1;
         }
-		If (N1 = 0) {
-			return 0;
-		sama = true;
-*/		
+    } else {
+        if (IsEmpty(L2)) {
+            return 1;
+        } else {
+		    if (Info(L1) > Info(L2)) return 1;
+            else if (Info(L1) < Info(L2)) return -1;
+            else { ListCompare(Tail(L1),Tail(L2)); }
+        }
+    }
 }
 /* Menghasilkan: -1 jika L1 < L2, 0 jika L1 = L2, dan 1 jika L1 > L2 */
 /* Jika L[i] adalah elemen L pada urutan ke-i dan |L| adalah panjang L: */
