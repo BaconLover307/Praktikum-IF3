@@ -1,6 +1,6 @@
 /* Nama             : Gregorius Jovan Kresnadi */
 /* NIM              : 13518135 */
-/* Tanggal          : 14-11-2019 */
+/* Tanggal          : 21-11-2019 */
 /* Program          : inverBtree.c */
 
 #include "bintree.h"
