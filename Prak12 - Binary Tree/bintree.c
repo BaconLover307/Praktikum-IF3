@@ -546,8 +546,8 @@ void InvertBtree(BinTree *P) {
 	if(!IsTreeOneElmt(*P)) {
 		PLtemp = Left(*P);
 		PRtemp = Right(*P);
-		InvertBtree(PRtemp);
-		InvertBtree(PLtemp);
+		InvertBtree(&PLtemp);
+		InvertBtree(&PRtemp);
 		Left(*P) = PRtemp;
 		Right(*P) = PLtemp;
 	}		
