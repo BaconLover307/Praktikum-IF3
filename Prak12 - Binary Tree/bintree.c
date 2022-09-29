@@ -544,24 +544,12 @@ void InvertBtree(BinTree *P) {
 	BinTree PLtemp, PRtemp;
 	// Algoritma
 	if(!IsTreeOneElmt(*P)) {
-		if (IsBiner(*P)) {
-			PLtemp = Left(*P);
-			PRtemp = Right(*P);
-			Left(*P) = PRtemp;
-			Right(*P) = PLtemp;
-			InvertBtree(&Left(*P));
-			InvertBtree(&Right(*P));
-		} else if (IsUnerLeft(*P)) {
-			PLtemp = Left(*P);
-			Left(*P) = Nil;
-			Right(*P) = PLtemp;
-			InvertBtree(&Right(*P));
-		} else if (IsUnerRight(*P)) {
-			Left(*P) = PRtemp;
-			Right(*P) = Nil;
-			PRtemp = Right(*P);
-			InvertBtree(&Left(*P));
-		}
+		PLtemp = Left(*P);
+		PRtemp = Right(*P);
+		InvertBtree(PRtemp);
+		InvertBtree(PLtemp);
+		Left(*P) = PRtemp;
+		Right(*P) = PLtemp;
 	}		
 }
 /* I.S. Pohon P terdefinisi */
